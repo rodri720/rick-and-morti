@@ -15,14 +15,14 @@ function App() {
   const userName = "fmontoya@soyhenry.com";
   const password = "feli123";
   const onSearch = (id) => {
-    fetch(`https://rickandmortyapi.com/api/character/${id}`)
+    fetch(`http://localhost:3001/rickandmorty/character/${id}`)
       .then((res) => res.json())
       .then((data) => {
         // data --> {}
         (
           data.name
             ? characters.filter((char) => char.id === data.id).length === 0
-            : ""
+            : alert(data.error)
         )
           ? setCharacters([...characters, data])
           : alert("Personaje ya existe");
