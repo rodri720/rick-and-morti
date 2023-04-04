@@ -3,7 +3,17 @@ import { Link } from "react-router-dom";
 import { addFavorite, deleteFavorite } from "../reducer/actions";
 import { connect } from "react-redux";
 import { useState, useEffect } from "react";
-function Card({ id, name, species, image, gender, onClose, deleteFavorite, addFavorite, myFavorites }) {
+function Card({
+  id,
+  name,
+  species,
+  image,
+  gender,
+  onClose,
+  deleteFavorite,
+  addFavorite,
+  allCharacters,
+}) {
   const [isFav, setIsFav] = useState(false);
 
   const handleFavorite = () => {
@@ -17,12 +27,12 @@ function Card({ id, name, species, image, gender, onClose, deleteFavorite, addFa
   };
 
   useEffect(() => {
-    myFavorites.forEach((fav) => {
+    allCharacters.forEach((fav) => {
       if (fav.id === id) {
         setIsFav(true);
       }
     });
-  }, [myFavorites]);
+  }, [allCharacters]);
   return (
     <div className={styles.container}>
       <div className={styles.buttonContainer}>
@@ -53,8 +63,8 @@ function Card({ id, name, species, image, gender, onClose, deleteFavorite, addFa
 
 const mapStateToProps = (state) => {
   return {
-    myFavorites: state.myFavorites
-  }
+    allCharacters: state.allCharacters,
+  };
 }
 
 const mapDispatchToProps = (dispatch) => {
