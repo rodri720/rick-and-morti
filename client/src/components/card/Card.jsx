@@ -12,7 +12,7 @@ function Card({
   onClose,
   deleteFavorite,
   addFavorite,
-  allCharacters,
+  myFavorites,
 }) {
   const [isFav, setIsFav] = useState(false);
 
@@ -27,12 +27,12 @@ function Card({
   };
 
   useEffect(() => {
-    allCharacters.forEach((fav) => {
+    myFavorites.forEach((fav) => {
       if (fav.id === id) {
         setIsFav(true);
       }
     });
-  }, [allCharacters]);
+  }, [myFavorites]);
   return (
     <div className={styles.container}>
       <div className={styles.buttonContainer}>
@@ -63,9 +63,9 @@ function Card({
 
 const mapStateToProps = (state) => {
   return {
-    allCharacters: state.allCharacters,
+    myFavorites: state.myFavorites,
   };
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
