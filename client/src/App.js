@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import "./App.css";
 import Cards from "./components/cards/Cards.jsx";
@@ -12,50 +13,63 @@ function App() {
   const location = useLocation();
   const [characters, setCharacters] = useState([]);
   const [access, setAccess] = useState(false);
-  const userName = "fmontoya@soyhenry.com";
-  const password = "feli123";
+  /* const userName = "fmontoya@soyhenry.com";
+  const password = "feli123"; */
   const onSearch = (id) => {
     fetch(`http://localhost:3001/rickandmorty/character/${id}`)
       .then((res) => res.json())
       .then((data) => {
         // data --> {}
-        (
-          data.name
-            ? characters.filter((char) => char.id === data.id).length === 0
-            : alert(data.error)
-        )
-          ? setCharacters([...characters, data])
-          : alert("Personaje ya existe");
+        const { id } = data;
+        const char = characters.find((char) => char.id === id);
+        if (id) {
+          if (char) return alert("Personaje ya existe");
+          setCharacters([...characters, data]);
+        } else {
+          alert(data.error);
+        }
       })
       .catch((error) => console.log(error));
   };
-
   const onClose = (id) => {
     const filtered = characters.filter((char) => char.id !== Number(id));
     setCharacters(filtered);
   };
 
-  const login = (userData) => {
+  // Sin Express
+  /* const login = (userData) => {
     // {userName : "fmontoya@soyhenry.com", password: "feli123"}
-    /* if(userData.userName === userName &&
+    if(userData.userName === userName &&
       userData.password === password) {
         setAccess(true);
         navigate("/home")
       }else{
         alert("Datos incorrectos, por favor verifique")
-      } */
-      setAccess(true);
-      navigate("/home");
-  };
+      }
+    setAccess(true);
+    navigate("/home");
+  }; */
 
-  const logOut = () => {
-    access && setAccess(false) 
-    navigate("/")
+
+  // Con Express
+  function login(userData) {
+    const { userName, password } = userData;
+    const URL = "http://localhost:3001/rickandmorty/login/";
+    axios(`${URL}?email=${userName}&password=${password}`).then(({ data }) => {
+      const { access } = data;
+      setAccess(data);
+      access && navigate("/home");
+    });
   }
 
-  useEffect(()=>{
-    !access && navigate("/")
-  },[access, navigate])
+  const logOut = () => {
+    access && setAccess(false);
+    navigate("/");
+  };
+
+  useEffect(() => {
+    !access && navigate("/");
+  }, [access, navigate]);
 
   return (
     <div
