@@ -1,8 +1,8 @@
-import axios from "axios"
+import axios from "axios";
 import { ADD_FAVORITE, DELETE_FAVORITE, FILTER, ORDER } from "./actionsTypes";
 const endpoint = "http://localhost:3001/rickandmorty/fav";
 
-// SIN EXPRESS 
+// SIN EXPRESS
 
 /* export const addFavorite = (character) => {
   console.log(character);
@@ -20,7 +20,8 @@ const endpoint = "http://localhost:3001/rickandmorty/fav";
 }; */
 
 // CON EXPRESS
-export const addFavorite = (character) => {
+// con promesas
+/* export const addFavorite = (character) => {
   return (dispatch) => {
     axios.post(endpoint, character).then(({ data }) => {
       return dispatch({
@@ -29,9 +30,24 @@ export const addFavorite = (character) => {
       });
     });
   };
+}; */
+// con async await
+export const addFavorite = (character) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.post(endpoint, character);
+      return dispatch({
+        type: ADD_FAVORITE,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 };
 
-export const deleteFavorite = (id) => {
+// con promesas
+/* export const deleteFavorite = (id) => {
   return (dispatch) => {
     axios.delete(`${endpoint}/${id}`).then(({ data }) => {
       return dispatch({
@@ -39,6 +55,21 @@ export const deleteFavorite = (id) => {
         payload: data,
       });
     });
+  };
+}; */
+
+// con async await
+export const deleteFavorite = (id) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.delete(`${endpoint}/${id}`);
+      return dispatch({
+        type: DELETE_FAVORITE,
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 

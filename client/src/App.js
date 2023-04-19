@@ -15,7 +15,7 @@ function App() {
   const [access, setAccess] = useState(false);
   /* const userName = "fmontoya@soyhenry.com";
   const password = "feli123"; */
-  const onSearch = (id) => {
+  /* const onSearch = (id) => {
     fetch(`http://localhost:3001/rickandmorty/character/${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -30,6 +30,21 @@ function App() {
         }
       })
       .catch((error) => console.log(error));
+  }; */
+
+  const onSearch = async (id) => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3001/rickandmorty/character/${id}`
+      );
+      const char = characters.find((char) => char.id === id);
+      if (id) {
+        if (char) return alert("Personaje ya existe");
+        setCharacters([...characters, data]);
+      }
+    } catch (error) {
+      alert(error.message)
+    }
   };
   const onClose = (id) => {
     const filtered = characters.filter((char) => char.id !== Number(id));
@@ -50,9 +65,8 @@ function App() {
     navigate("/home");
   }; */
 
-
   // Con Express
-  function login(userData) {
+  /* function login(userData) {
     const { userName, password } = userData;
     const URL = "http://localhost:3001/rickandmorty/login/";
     axios(`${URL}?email=${userName}&password=${password}`).then(({ data }) => {
@@ -60,7 +74,20 @@ function App() {
       setAccess(data);
       access && navigate("/home");
     });
-  }
+  } */
+
+  const login = async (userData) => {
+    try {
+      const { userName, password } = userData;
+      const URL = "http://localhost:3001/rickandmorty/login/";
+      const {data} = await axios(`${URL}?email=${userName}&password=${password}`)
+      const { access } = data;
+      setAccess(data);
+      access && navigate("/home");
+    } catch (error) {
+      alert(error.message)
+    }
+  };
 
   const logOut = () => {
     access && setAccess(false);
