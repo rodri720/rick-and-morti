@@ -1,10 +1,19 @@
 // EXPRESS
 /* ¡Genial! Ahora has conectado tu servidor con tu Front-End y puedes interactuar con tu base de datos a través de tu aplicación web. Recuerda seguir practicando y aprendiendo para mejorar tus habilidades en desarrollo web. ¡Mucho éxito en tu camino! */
 const PORT = 3001;
-const server = require("./app")
-server.listen(PORT, () => {
-   console.log('Server raised in port: ' + PORT);
-});
+const server = require("./app");
+const { conn } = require("./DB_connection");
+
+conn
+  .sync({ alter: true })
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log("Server raised in port: " + PORT);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 // HTTP
 /* const http = require("http");
